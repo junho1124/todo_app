@@ -33,55 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final Set<int> checked = {};
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    _controller.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: false,
-        title: Expanded(child: Text('할일 목록')),
-        actions: isDeleteMode ? deleteModeActions : normalModeActions,
-      ),
-      body: ListView(children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: todoList
-              .asMap()
-              .entries
-              .map((e) => ListTile(
-                  leading: isDeleteMode
-                      ? Checkbox(
-                          onChanged: (bool value) {
-                            setState(() {
-                              if (value) {
-                                checked.add(e.key);
-                              } else {
-                                checked.remove(e.key);
-                              }
-                            });
-                          },
-                          value: checked.contains(e.key),
-                        )
-                      : null,
-                  title: Text(e.value)))
-              .toList(),
-        ),
-      ]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _addTodo();
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
-
   List<Widget> normalModeActions = [];
   List<Widget> deleteModeActions = [];
 
@@ -123,6 +74,57 @@ class _MyHomePageState extends State<MyHomePage> {
           })
     ];
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        title: Text('할일 목록'),
+        actions: isDeleteMode ? deleteModeActions : normalModeActions,
+      ),
+      body: ListView(children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: todoList
+              .asMap()
+              .entries
+              .map((e) => ListTile(
+                  leading: isDeleteMode
+                      ? Checkbox(
+                          onChanged: (bool value) {
+                            setState(() {
+                              if (value) {
+                                checked.add(e.key);
+                              } else {
+                                checked.remove(e.key);
+                              }
+                            });
+                          },
+                          value: checked.contains(e.key),
+                        )
+                      : null,
+                  title: Text(e.value)))
+              .toList(),
+        ),
+      ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addTodo();
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+
 
   void _addTodo() {
     showDialog(
